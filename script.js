@@ -33,9 +33,16 @@ noBtn.addEventListener("mouseover", moveNoFast);
 /* IF HE ACTUALLY CLICKS NO */
 noBtn.addEventListener("click", () => {
   noClicked = true;
-  noBtn.style.display = "none";
-  yesBtn.textContent = "I THINK YOU MEANT YES 😏";
+
+  // Show "Wrong Choice" briefly
+  noBtn.textContent = "Wrong Choice";
+
+  setTimeout(() => {
+    noBtn.style.display = "none";
+    yesBtn.textContent = "I THINK YOU MEANT YES 😏";
+  }, 600);
 });
+
 
 /* 🍌❤️🐒 FLOATING CHAOS */
 const emojis = ["❤️", "🍌", "🐒"];
@@ -90,3 +97,4 @@ function sayYes() {
     </div>
   `;
 }
+
