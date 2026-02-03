@@ -2,19 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Valentine?</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <div class="floating"></div>
+
   <div class="container">
     <h1>Do you want to be my Valentine? 💖</h1>
 
     <div class="buttons">
       <button class="yes" onclick="sayYes()">Yes 💕</button>
-      <button class="no" id="noBtn">No 💔</button>
+      <button class="no" id="noBtn">❌ Wrong choice</button>
     </div>
   </div>
+
+  <!-- Achievement sound -->
+  <audio id="achievementSound" src="achievement.mp3"></audio>
 
   <script src="script.js"></script>
 </body>
 </html>
+

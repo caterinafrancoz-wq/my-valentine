@@ -1,43 +1,71 @@
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: system-ui, Arial, sans-serif;
   background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
   height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: 0;
+  overflow: hidden;
 }
 
+/* Main container */
 .container {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  background: white;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Buttons area */
+.buttons {
+  position: relative;
+  width: 260px;
+  height: 170px;
 }
 
 h1 {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
-.buttons {
-  position: relative;
-  height: 150px;
-}
-
+/* Buttons */
 button {
-  padding: 15px 30px;
+  padding: 15px 25px;
   font-size: 18px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
 }
 
 .yes {
-  background-color: #ff69b4;
+  background: #ff69b4;
   color: white;
 }
 
 .no {
-  background-color: #ccc;
+  background: #444;
+  color: white;
   position: absolute;
+  left: 80px;
+  top: 80px;
+}
+
+/* Floating emojis */
+.floating span {
+  position: absolute;
+  bottom: -50px;
+  animation: floatUp linear infinite;
+  opacity: 0.9;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-110vh);
+    opacity: 0;
+  }
 }
