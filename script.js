@@ -102,7 +102,7 @@ function sayYes() {
 
 function showBananaGame() {
   const totalHits = 20;
-  const drainPerSecond = 3;
+  const drainPerSecond = 20;
 
   let hits = 0;
   let progress = 0;
@@ -309,7 +309,7 @@ function showRedFlagsGame() {
       }
     });
 
-    if (Date.now() - start > 10000) {
+    if (Date.now() - start > 12000) {
       clearInterval(loop);
       playAchievement();
       setTimeout(showFinalScreen, 400);
@@ -348,5 +348,6 @@ function showFinalScreen() {
     </div>
   `;
 }
+
 
 
