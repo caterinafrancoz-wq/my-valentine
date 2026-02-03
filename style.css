@@ -1,0 +1,43 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  text-align: center;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+h1 {
+  margin-bottom: 30px;
+}
+
+.buttons {
+  position: relative;
+  height: 150px;
+}
+
+button {
+  padding: 15px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.yes {
+  background-color: #ff69b4;
+  color: white;
+}
+
+.no {
+  background-color: #ccc;
+  position: absolute;
+}
