@@ -31,29 +31,25 @@ noBtn.addEventListener("touchstart", (e) => {
    ========================= */
 
 function sayYes() {
-  // Play sound safely
   if (achievementSound) {
     achievementSound.currentTime = 0;
     achievementSound.play().catch(() => {});
   }
-
-  // Load game screen
   setTimeout(showBananaGameHard, 250);
 }
 
 function showBananaGameHard() {
-  // HARD SETTINGS
-  const totalHits = 20;                 // must reach 20
-  const gainPerHit = 100 / totalHits;   // +5% per click
-  const drainPerSecond = 25;            // HARD: bar drains 18% per second
-  const tickMs = 50;                    // update 20 times/sec
+  const totalHits = 20;
+  const gainPerHit = 100 / totalHits;
+  const drainPerSecond = 25;
+  const tickMs = 50;
 
-  let progressPct = 0;                  // 0..100
+  let progressPct = 0;
   let hits = 0;
   let gameOver = false;
 
   document.body.innerHTML = `
-    <div style="
+    <div id="game" style="
       height:100vh;
       display:flex;
       flex-direction:column;
@@ -64,22 +60,20 @@ function showBananaGameHard() {
       text-align:center;
       user-select:none;
       padding:20px;
+      overflow:hidden;
     ">
-      <h1 style="margin:0 0 6px 0;">🍌 SMASH THE BANANA 🍌</h1>
-      <p id="bananaText" style="margin:0 0 18px 0;">
-        Get to 20 hits FAST. If you slow down, the bar drains 😈
-      </p>
+      <h1>🍌 SMASH THE BANANA 🍌</h1>
+      <p id="bananaText">Get to 20 hits FAST or the bar drains 😈</p>
 
       <div
         id="banana"
         style="
           font-size:130px;
           cursor:pointer;
-          margin:10px 0 18px 0;
+          margin:12px 0 20px 0;
           transition:transform 0.08s;
           filter: drop-shadow(0 8px 12px rgba(0,0,0,0.2));
         "
-        title="SMASH"
       >🍌</div>
 
       <div style="
@@ -88,7 +82,6 @@ function showBananaGameHard() {
         background:#ddd;
         border-radius:999px;
         overflow:hidden;
-        box-shadow: inset 0 2px 6px rgba(0,0,0,0.15);
       ">
         <div
           id="progress"
@@ -101,15 +94,12 @@ function showBananaGameHard() {
         ></div>
       </div>
 
-      <p style="margin:10px 0 0 0;font-size:14px;">
+      <p style="margin-top:10px;font-size:14px;">
         Hits: <span id="hitCount">0</span> / ${totalHits}
-        &nbsp;•&nbsp;
-        Power: <span id="powerPct">0</span>%
+        • Power: <span id="powerPct">0</span>%
       </p>
 
-      <p id="hint" style="margin-top:14px;font-size:13px;opacity:0.85;">
-        Pro tip: rapid clicks, no mercy.
-      </p>
+      <div id="particles"></div>
     </div>
   `;
 
@@ -118,7 +108,7 @@ function showBananaGameHard() {
   const hitCountEl = document.getElementById("hitCount");
   const powerPctEl = document.getElementById("powerPct");
   const bananaTextEl = document.getElementById("bananaText");
-  const hintEl = document.getElementById("hint");
+  const particles = document.getElementById("particles");
 
   function setProgress(p) {
     progressPct = Math.max(0, Math.min(100, p));
@@ -126,16 +116,36 @@ function showBananaGameHard() {
     powerPctEl.textContent = Math.round(progressPct);
   }
 
-  // Drain loop
+  /* 🍌 PARTICLES */
+  function spawnParticles(x, y) {
+    const emojis = ["🍌", "💥", "✨"];
+    for (let i = 0; i < 10; i++) {
+      const p = document.createElement("span");
+      p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      p.style.position = "fixed";
+      p.style.left = `${x}px`;
+      p.style.top = `${y}px`;
+      p.style.pointerEvents = "none";
+      p.style.fontSize = "18px";
+      p.style.transition = "transform 0.6s ease-out, opacity 0.6s";
+      particles.appendChild(p);
+
+      const dx = (Math.random() - 0.5) * 200;
+      const dy = Math.random() * -200;
+
+      requestAnimationFrame(() => {
+        p.style.transform = `translate(${dx}px, ${dy}px)`;
+        p.style.opacity = "0";
+      });
+
+      setTimeout(() => p.remove(), 600);
+    }
+  }
+
+  /* Drain loop */
   const drainPerTick = (drainPerSecond * tickMs) / 1000;
   const drainTimer = setInterval(() => {
-    if (gameOver) return;
-    setProgress(progressPct - drainPerTick);
-
-    // If he keeps failing, roast gently
-    if (progressPct === 0 && hits > 0) {
-      hintEl.textContent = "Too slow… the banana is winning 😭";
-    }
+    if (!gameOver) setProgress(progressPct - drainPerTick);
   }, tickMs);
 
   function win() {
@@ -144,32 +154,30 @@ function showBananaGameHard() {
     showFinalScreen();
   }
 
-  banana.addEventListener("click", () => {
+  banana.addEventListener("click", (e) => {
     if (gameOver) return;
 
-    // Visual smack
+    // Smash animation
     banana.style.transform = "scale(0.92) rotate(-6deg)";
     setTimeout(() => {
       banana.style.transform = "scale(1) rotate(0deg)";
     }, 70);
 
-    // Update counters
+    // Particles
+    spawnParticles(e.clientX, e.clientY);
+
     hits++;
     hitCountEl.textContent = hits;
-
-    // Add progress
     setProgress(progressPct + gainPerHit);
 
-    // Dynamic taunts
-    if (hits === 5) bananaTextEl.textContent = "Okay okay… not bad 😏";
-    if (hits === 10) bananaTextEl.textContent = "HALFWAY. Don’t choke now.";
-    if (hits === 15) bananaTextEl.textContent = "🧠 Focus. Click faster.";
+    // 🐒 Monkey cheers
+    if (hits === 10) bananaTextEl.textContent = "🐒 OOH OOH! Halfway!";
+    if (hits === 15) bananaTextEl.textContent = "🐒 SCREAMING. KEEP GOING.";
+
     if (hits >= totalHits && progressPct >= 100) {
       win();
     } else if (hits >= totalHits) {
-      // If he got 20 hits but meter drained, make it clear it's combo-based
-      bananaTextEl.textContent = "20 hits isn’t enough… you need SPEED 😈";
-      hintEl.textContent = "You must fill the bar before it drains.";
+      bananaTextEl.textContent = "Too slow 😈 SPEED MATTERS.";
     }
   });
 }
@@ -192,14 +200,14 @@ function showFinalScreen() {
     ">
       <div>
         <h1>🏆 ACHIEVEMENT UNLOCKED 🏆</h1>
-        <h2>✨ Banana Boss Defeated ✨</h2>
+        <h2>🐒🍌 BANANA BOSS DEFEATED 🍌🐒</h2>
 
         <p style="font-size:18px;margin-top:20px">
-          Respect. You earned the date 💖<br><br>
+          Absolute gamer behaviour 💖<br><br>
           📍 Mystery location<br>
           🗓️ This weekend<br>
           🍝 Food involved<br>
-          🐒 Monkeys celebrating
+          🐒 Monkeys cheering violently
         </p>
 
         <p style="margin-top:25px;font-size:16px">
@@ -210,4 +218,3 @@ function showFinalScreen() {
     </div>
   `;
 }
-
