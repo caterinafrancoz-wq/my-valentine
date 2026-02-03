@@ -2,42 +2,55 @@ const noBtn = document.getElementById("noBtn");
 const floating = document.querySelector(".floating");
 const achievementSound = document.getElementById("achievementSound");
 
-let chaosLevel = 1;
+let speed = 1;
 
-/* ❌ NO BUTTON CHAOS — FIXED FOR MOBILE */
-noBtn.addEventListener("click", () => {
-  chaosLevel++;
+/* 📱 MOVE NO BUTTON ON TOUCH / NEAR TAP */
+function moveNoButton() {
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
 
-  // Phone vibration
-  if (navigator.vibrate) {
-    navigator.vibrate([80, 40, 120]);
-  }
+  const maxX = window.innerWidth - btnWidth - 10;
+  const maxY = window.innerHeight - btnHeight - 10;
 
-  // Get the parent container (the buttons box)
-  const container = noBtn.parentElement;
-  const containerRect = container.getBoundingClientRect();
-
-  const maxX = containerRect.width - noBtn.offsetWidth;
-  const maxY = containerRect.height - noBtn.offsetHeight;
-
-  // Keep movement INSIDE the container
   const x = Math.random() * maxX;
   const y = Math.random() * maxY;
 
+  noBtn.style.position = "fixed";
   noBtn.style.left = `${x}px`;
   noBtn.style.top = `${y}px`;
+}
 
-  const insults = [
-    "❌ Wrong choice",
-    "❌ Skill issue",
-    "❌ Try again",
-    "❌ Absolutely not",
-    "❌ Nice try 😏",
-    "❌ You wish"
-  ];
-
-  noBtn.textContent = insults[Math.min(chaosLevel - 1, insults.length - 1)];
+/* Simulate hover for mobile */
+noBtn.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  moveNoButton();
 });
+
+/* ❌ IF HE MANAGES TO CLICK */
+noBtn.addEventListener("click", () => {
+  if (navigator.vibrate) {
+    navigator.vibrate(100);
+  }
+
+  if (speed === 1) {
+    noBtn.textContent = "Wrong choice";
+  } else {
+    noBtn.textContent = "Nice try";
+  }
+
+  setTimeout(() => {
+    noBtn.textContent = "No";
+  }, 700);
+
+  speed += 0.7;
+});
+
+/* Increase chaos by moving more often */
+setInterval(() => {
+  if (speed > 1) {
+    moveNoButton();
+  }
+}, 700 / speed);
 
 /* 🍌❤️🐒 FLOATING CHAOS */
 const emojis = ["❤️", "🍌", "🐒"];
@@ -77,17 +90,16 @@ function sayYes() {
         <h2>✨ Valentine Acquired ✨</h2>
 
         <p style="font-size:18px;margin-top:20px">
-          You’ve been selected for a Valentine’s date 🎮💖<br><br>
+          You’ve unlocked a Valentine’s date 🎮💖<br><br>
           📍 Mystery location<br>
           🗓️ This weekend<br>
           🍝 Food involved<br>
-          🐒 Monkeys emotionally supporting us
+          🐒 Monkeys cheering in the background
         </p>
 
         <p style="margin-top:25px;font-size:16px">
           <strong>Reward:</strong><br>
-          Unlimited kisses, laughs,<br>
-          and lifetime Player 2 access ❤️
+          Lifetime Player 2 access ❤️
         </p>
       </div>
     </div>
