@@ -56,38 +56,45 @@ setInterval(createEmoji, 350);
    ========================= */
 
 function sayYes() {
-  try {
-    achievementSound.play();
-  } catch (e) {}
+  const sound = document.getElementById("achievementSound");
 
-  document.body.innerHTML = `
-    <div style="
-      height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:20px;
-      background:linear-gradient(135deg,#ffb6c1,#ffe4e1);
-      font-family:system-ui;
-    ">
-      <div>
-        <h1>🏆 ACHIEVEMENT UNLOCKED 🏆</h1>
-        <h2>✨ Valentine Acquired ✨</h2>
+  // Play sound directly from click
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
 
-        <p style="font-size:18px;margin-top:20px">
-          You’re officially going on a Valentine’s date 💖<br><br>
-          📍 Mystery location<br>
-          🗓️ This weekend<br>
-          🍝 Food involved<br>
-          🐒 Monkeys celebrating
-        </p>
+  // Delay page change so sound can start
+  setTimeout(() => {
+    document.body.innerHTML = `
+      <div style="
+        height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        padding:20px;
+        background:linear-gradient(135deg,#ffb6c1,#ffe4e1);
+        font-family:system-ui;
+      ">
+        <div>
+          <h1>🏆 ACHIEVEMENT UNLOCKED 🏆</h1>
+          <h2>✨ Valentine Acquired ✨</h2>
 
-        <p style="margin-top:25px;font-size:16px">
-          <strong>Reward:</strong><br>
-          Lifetime Player 2 access ❤️
-        </p>
+          <p style="font-size:18px;margin-top:20px">
+            You’re officially going on a Valentine’s date 💖<br><br>
+            📍 Mystery location<br>
+            🗓️ This weekend<br>
+            🍝 Food involved<br>
+            🐒 Monkeys celebrating
+          </p>
+
+          <p style="margin-top:25px;font-size:16px">
+            <strong>Reward:</strong><br>
+            Lifetime Player 2 access ❤️
+          </p>
+        </div>
       </div>
-    </div>
-  `;
+    `;
+  }, 300);
 }
+
+
