@@ -1,16 +1,17 @@
 const noBtn = document.getElementById("noBtn");
+const yesBtn = document.querySelector(".yes");
 const floating = document.querySelector(".floating");
 const achievementSound = document.getElementById("achievementSound");
 
-let speed = 1;
+let noClicked = false;
 
-/* 📱 MOVE NO BUTTON ON TOUCH / NEAR TAP */
-function moveNoButton() {
+/* 📱 MOVE NO BUTTON FAST AROUND SCREEN */
+function moveNoFast() {
   const btnWidth = noBtn.offsetWidth;
   const btnHeight = noBtn.offsetHeight;
 
-  const maxX = window.innerWidth - btnWidth - 10;
-  const maxY = window.innerHeight - btnHeight - 10;
+  const maxX = window.innerWidth - btnWidth;
+  const maxY = window.innerHeight - btnHeight;
 
   const x = Math.random() * maxX;
   const y = Math.random() * maxY;
@@ -20,37 +21,21 @@ function moveNoButton() {
   noBtn.style.top = `${y}px`;
 }
 
-/* Simulate hover for mobile */
+/* Move on touch (mobile hover replacement) */
 noBtn.addEventListener("touchstart", (e) => {
   e.preventDefault();
-  moveNoButton();
+  moveNoFast();
 });
 
-/* ❌ IF HE MANAGES TO CLICK */
+/* Also move if mouse somehow exists */
+noBtn.addEventListener("mouseover", moveNoFast);
+
+/* IF HE ACTUALLY CLICKS NO */
 noBtn.addEventListener("click", () => {
-  if (navigator.vibrate) {
-    navigator.vibrate(100);
-  }
-
-  if (speed === 1) {
-    noBtn.textContent = "Wrong choice";
-  } else {
-    noBtn.textContent = "Nice try";
-  }
-
-  setTimeout(() => {
-    noBtn.textContent = "No";
-  }, 700);
-
-  speed += 0.7;
+  noClicked = true;
+  noBtn.style.display = "none";
+  yesBtn.textContent = "I THINK YOU MEANT YES 😏";
 });
-
-/* Increase chaos by moving more often */
-setInterval(() => {
-  if (speed > 1) {
-    moveNoButton();
-  }
-}, 700 / speed);
 
 /* 🍌❤️🐒 FLOATING CHAOS */
 const emojis = ["❤️", "🍌", "🐒"];
@@ -68,7 +53,7 @@ function createEmoji() {
 
 setInterval(createEmoji, 350);
 
-/* 🎮 YES = ACHIEVEMENT UNLOCKED */
+/* 🎮 YES SCREEN */
 function sayYes() {
   try {
     achievementSound.play();
@@ -90,11 +75,11 @@ function sayYes() {
         <h2>✨ Valentine Acquired ✨</h2>
 
         <p style="font-size:18px;margin-top:20px">
-          You’ve unlocked a Valentine’s date 🎮💖<br><br>
+          You’re officially going on a Valentine’s date 💖<br><br>
           📍 Mystery location<br>
           🗓️ This weekend<br>
           🍝 Food involved<br>
-          🐒 Monkeys cheering in the background
+          🐒 Monkeys celebrating
         </p>
 
         <p style="margin-top:25px;font-size:16px">
