@@ -4,18 +4,23 @@ const achievementSound = document.getElementById("achievementSound");
 
 let chaosLevel = 1;
 
-/* ❌ NO BUTTON CHAOS */
+/* ❌ NO BUTTON CHAOS — FIXED FOR MOBILE */
 noBtn.addEventListener("click", () => {
   chaosLevel++;
 
-  // Vibrate phone (mobile only)
+  // Phone vibration
   if (navigator.vibrate) {
-    navigator.vibrate([100, 50, 200]);
+    navigator.vibrate([80, 40, 120]);
   }
 
-  const maxX = window.innerWidth - noBtn.offsetWidth;
-  const maxY = window.innerHeight - noBtn.offsetHeight;
+  // Get the parent container (the buttons box)
+  const container = noBtn.parentElement;
+  const containerRect = container.getBoundingClientRect();
 
+  const maxX = containerRect.width - noBtn.offsetWidth;
+  const maxY = containerRect.height - noBtn.offsetHeight;
+
+  // Keep movement INSIDE the container
   const x = Math.random() * maxX;
   const y = Math.random() * maxY;
 
@@ -52,7 +57,9 @@ setInterval(createEmoji, 350);
 
 /* 🎮 YES = ACHIEVEMENT UNLOCKED */
 function sayYes() {
-  achievementSound.play();
+  try {
+    achievementSound.play();
+  } catch (e) {}
 
   document.body.innerHTML = `
     <div style="
