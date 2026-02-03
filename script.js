@@ -101,7 +101,7 @@ function sayYes() {
 
 function showBananaGame() {
   const totalHits = 20;
-  const drainPerSecond = 20;
+  const drainPerSecond = 8;
   let progress = 0;
   let hits = 0;
   let over = false;
@@ -315,3 +315,4 @@ function showFinalScreen() {
     </div>
   `;
 }
+
