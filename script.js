@@ -1,11 +1,11 @@
 const noBtn = document.getElementById("noBtn");
-const yesBtn = document.querySelector(".yes");
 const floating = document.querySelector(".floating");
 const achievementSound = document.getElementById("achievementSound");
 
-let noClicked = false;
+/* =========================
+   NO BUTTON: IMPOSSIBLE MODE
+   ========================= */
 
-/* 📱 MOVE NO BUTTON FAST AROUND SCREEN */
 function moveNoFast() {
   const btnWidth = noBtn.offsetWidth;
   const btnHeight = noBtn.offsetHeight;
@@ -21,30 +21,20 @@ function moveNoFast() {
   noBtn.style.top = `${y}px`;
 }
 
-/* Move on touch (mobile hover replacement) */
+/* Desktop hover = dodge */
+noBtn.addEventListener("mouseover", moveNoFast);
+
+/* Mobile fallback (does nothing harmful on desktop) */
 noBtn.addEventListener("touchstart", (e) => {
   e.preventDefault();
   moveNoFast();
 });
 
-/* Also move if mouse somehow exists */
-noBtn.addEventListener("mouseover", moveNoFast);
 
-/* IF HE ACTUALLY CLICKS NO */
-noBtn.addEventListener("click", () => {
-  noClicked = true;
+/* =========================
+   FLOATING EMOJIS BACKGROUND
+   ========================= */
 
-  // Show "Wrong Choice" briefly
-  noBtn.textContent = "Wrong Choice";
-
-  setTimeout(() => {
-    noBtn.style.display = "none";
-    yesBtn.textContent = "I THINK YOU MEANT YES 😏";
-  }, 600);
-});
-
-
-/* 🍌❤️🐒 FLOATING CHAOS */
 const emojis = ["❤️", "🍌", "🐒"];
 
 function createEmoji() {
@@ -60,7 +50,11 @@ function createEmoji() {
 
 setInterval(createEmoji, 350);
 
-/* 🎮 YES SCREEN */
+
+/* =========================
+   YES BUTTON / FINAL SCREEN
+   ========================= */
+
 function sayYes() {
   try {
     achievementSound.play();
@@ -97,4 +91,3 @@ function sayYes() {
     </div>
   `;
 }
-
