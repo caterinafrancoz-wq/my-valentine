@@ -309,7 +309,7 @@ function showRedFlagsGame() {
       }
     });
 
-    if (Date.now() - start > 7000) {
+    if (Date.now() - start > 10000) {
       clearInterval(loop);
       playAchievement();
       setTimeout(showFinalScreen, 400);
@@ -348,4 +348,5 @@ function showFinalScreen() {
     </div>
   `;
 }
+
 
