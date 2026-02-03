@@ -37,7 +37,7 @@ function playAchievement() {
 function showBananaGameHard() {
   const totalHits = 20;
   const gainPerHit = 100 / totalHits;
-  const drainPerSecond = 25; // 🔥 HARDER
+  const drainPerSecond = 22; // 🔥 HARDER
   const tickMs = 50;
 
   let progress = 0;
@@ -242,3 +242,4 @@ function showFinalScreen() {
     </div>
   `;
 }
+
