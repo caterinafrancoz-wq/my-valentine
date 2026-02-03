@@ -45,7 +45,7 @@ function showBananaGameHard() {
   // HARD SETTINGS
   const totalHits = 20;                 // must reach 20
   const gainPerHit = 100 / totalHits;   // +5% per click
-  const drainPerSecond = 18;            // HARD: bar drains 18% per second
+  const drainPerSecond = 25;            // HARD: bar drains 18% per second
   const tickMs = 50;                    // update 20 times/sec
 
   let progressPct = 0;                  // 0..100
@@ -210,3 +210,4 @@ function showFinalScreen() {
     </div>
   `;
 }
+
