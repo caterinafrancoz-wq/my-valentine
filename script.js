@@ -2,15 +2,15 @@ const noBtn = document.getElementById("noBtn");
 const achievementSound = document.getElementById("achievementSound");
 
 /* =========================
-   NO BUTTON: IMPOSSIBLE MODE
+   NO BUTTON — IMPOSSIBLE
    ========================= */
 
 function moveNoFast() {
   const maxX = window.innerWidth - noBtn.offsetWidth;
   const maxY = window.innerHeight - noBtn.offsetHeight;
   noBtn.style.position = "fixed";
-  noBtn.style.left = `${Math.random() * maxX}px`;
-  noBtn.style.top = `${Math.random() * maxY}px`;
+  noBtn.style.left = Math.random() * maxX + "px";
+  noBtn.style.top = Math.random() * maxY + "px";
 }
 
 noBtn.addEventListener("mouseover", moveNoFast);
@@ -24,12 +24,13 @@ noBtn.addEventListener("touchstart", e => {
    ========================= */
 
 function playAchievement() {
+  if (!achievementSound) return;
   achievementSound.currentTime = 0;
   achievementSound.play().catch(() => {});
 }
 
 /* =========================
-   FLOATING BACKGROUND CHAOS
+   FLOATING BACKGROUND
    ========================= */
 
 function startFloatingBackground() {
@@ -47,13 +48,13 @@ function startFloatingBackground() {
     e.style.position = "absolute";
     e.style.left = Math.random() * 100 + "vw";
     e.style.top = "100vh";
-    e.style.fontSize = 20 + Math.random() * 20 + "px";
+    e.style.fontSize = 18 + Math.random() * 22 + "px";
     e.style.opacity = "0.8";
     e.style.transition = "transform 6s linear, opacity 6s linear";
     layer.appendChild(e);
 
     requestAnimationFrame(() => {
-      e.style.transform = `translateY(-120vh)`;
+      e.style.transform = "translateY(-120vh)";
       e.style.opacity = "0";
     });
 
@@ -101,9 +102,10 @@ function sayYes() {
 
 function showBananaGame() {
   const totalHits = 20;
-  const drainPerSecond = 8;
-  let progress = 0;
+  const drainPerSecond = 20;
+
   let hits = 0;
+  let progress = 0;
   let over = false;
 
   document.body.innerHTML = `
@@ -118,12 +120,15 @@ function showBananaGame() {
       text-align:center;
       user-select:none;
     ">
-      <h1>🍌 SMASH THE BANANA 🍌</h1>
-      <p>20 hits fast — keep the momentum</p>
+      <h1>🍌 Smash the Banana 🍌</h1>
+      <p style="opacity:.85">A little chaos never hurt anyone</p>
+
       <div id="banana" style="font-size:130px;cursor:pointer;outline:none;">🍌</div>
-      <div style="width:420px;height:16px;background:#ddd;border-radius:999px;overflow:hidden;">
+
+      <div style="width:420px;max-width:80vw;height:16px;background:#ddd;border-radius:999px;overflow:hidden;">
         <div id="bar" style="height:100%;width:0%;background:#ff69b4;"></div>
       </div>
+
       <p>Hits: <span id="hits">0</span> / 20</p>
     </div>
   `;
@@ -142,6 +147,7 @@ function showBananaGame() {
 
   banana.onclick = e => {
     if (over) return;
+
     spawnSmashParticles(e.clientX, e.clientY);
     hits++;
     hitsEl.textContent = hits;
@@ -160,7 +166,7 @@ function showBananaGame() {
 }
 
 /* =========================
-   MEMORY MATCH — NO RESHUFFLE
+   MEMORY MATCH (16 CARDS)
    ========================= */
 
 function showMemoryGame() {
@@ -183,9 +189,15 @@ function showMemoryGame() {
       font-family:system-ui;
       text-align:center;
     ">
-      <h1>🐒 MEMORY MATCH 🧠</h1>
-      <p>Matched cards stay. No reshuffle.</p>
-      <div id="grid" style="display:grid;grid-template-columns:repeat(4,80px);gap:14px;">
+      <h1>🐒 Monkey Memory Match 🧠</h1>
+      <p style="opacity:.85">Focus… the monkey believes in you</p>
+
+      <div id="grid" style="
+        display:grid;
+        grid-template-columns:repeat(4,80px);
+        gap:14px;
+        margin-top:20px;
+      ">
         ${cards.map((_,i)=>`
           <div class="card" data-i="${i}" style="
             width:80px;height:80px;
@@ -196,6 +208,7 @@ function showMemoryGame() {
             justify-content:center;
             font-size:36px;
             cursor:pointer;
+            user-select:none;
           ">❓</div>
         `).join("")}
       </div>
@@ -205,6 +218,7 @@ function showMemoryGame() {
   document.querySelectorAll(".card").forEach(card => {
     card.onclick = () => {
       if (lock || card.classList.contains("matched") || card === first) return;
+
       const idx = card.dataset.i;
       card.textContent = cards[idx];
 
@@ -240,17 +254,25 @@ function showMemoryGame() {
 }
 
 /* =========================
-   FINAL GAME: RED FLAGS
+   RED FLAGS — HARD MODE
    ========================= */
 
 function showRedFlagsGame() {
   let start = Date.now();
   let monkey = { x: 0, y: 0 };
+  let flags = [];
 
   document.body.innerHTML = `
-    <div id="game" style="position:relative;height:100vh;background:#ffe4e1;overflow:hidden;">
+    <div id="game" style="
+      position:relative;
+      height:100vh;
+      background:#ffe4e1;
+      overflow:hidden;
+    ">
       <div id="monkey" style="position:absolute;font-size:48px;">🐒</div>
-      <p style="position:absolute;top:10px;width:100%;text-align:center;">Avoid red flags for 5 seconds 🚩</p>
+      <p style="position:absolute;top:10px;width:100%;text-align:center;font-family:system-ui;">
+        Avoid the red flags… for love 🚩
+      </p>
     </div>
   `;
 
@@ -265,7 +287,7 @@ function showRedFlagsGame() {
   };
 
   const loop = setInterval(() => {
-    if (Math.random() < 0.3) {
+    if (Math.random() < 0.6) {
       const f = document.createElement("div");
       f.textContent = "🚩";
       f.style.position = "absolute";
@@ -273,23 +295,26 @@ function showRedFlagsGame() {
       f.style.top = "-40px";
       f.style.fontSize = "36px";
       game.appendChild(f);
-
-      const fall = setInterval(() => {
-        f.style.top = f.offsetTop + 6 + "px";
-        if (Math.abs(f.offsetLeft - monkey.x) < 30 &&
-            Math.abs(f.offsetTop - monkey.y) < 30) {
-          clearInterval(loop);
-          showRedFlagsGame();
-        }
-      }, 50);
+      flags.push(f);
     }
 
-    if (Date.now() - start > 5000) {
+    flags.forEach(f => {
+      f.style.top = f.offsetTop + 9 + "px";
+
+      const dx = f.offsetLeft - monkey.x;
+      const dy = f.offsetTop - monkey.y;
+      if (Math.abs(dx) < 40 && Math.abs(dy) < 40) {
+        clearInterval(loop);
+        showRedFlagsGame();
+      }
+    });
+
+    if (Date.now() - start > 7000) {
       clearInterval(loop);
       playAchievement();
       setTimeout(showFinalScreen, 400);
     }
-  }, 200);
+  }, 50);
 }
 
 /* =========================
@@ -310,9 +335,16 @@ function showFinalScreen() {
       <div>
         <h1>🏆 ALL ACHIEVEMENTS UNLOCKED 🏆</h1>
         <h2>💖 VALENTINE CONFIRMED 💖</h2>
-        <p>You passed every test 😌</p>
+
+        <p style="margin-top:16px;font-size:16px;line-height:1.5">
+          You passed every test 😌<br><br>
+          <strong>🎮 New Quest Unlocked 🎮</strong><br>
+          Plan the perfect Valentine’s date 💖<br><br>
+          🗓️ Choose the day<br>
+          📍 Choose the place<br>
+          🐒 Choose wisely
+        </p>
       </div>
     </div>
   `;
 }
-
